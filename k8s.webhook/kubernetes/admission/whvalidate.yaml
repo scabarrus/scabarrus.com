@@ -1,0 +1,20 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: pod-limitation
+webhooks:
+- name: pod-limitation.scabarrus.com
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+  clientConfig:
+    service:
+      namespace: kube-system
+      name: my-svc-webhook
+      path: /validation
