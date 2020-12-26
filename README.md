@@ -25,9 +25,11 @@ If you are on remote VM you can save this image with following command:
 `docker save -o user-management.tar user-management:1.0`
 
 If you want to load the image proviously on the worker (no registry for the moment):<br>
-`# docker load -i /tmp/user-management<br>
-352733f0fa4c: Loading layer [==================================================>] 2.293 MB/2.293 MB<br>
-a725aa4d4c34: Loading layer [==================================================>] 61.37 MB/61.37 MB<br>
-64bee900ead7: Loading layer [==================================================>] 34.24 MB/34.24 MB<br>
-Loaded image: user-management:1.0`<br>
+```
+# docker load -i /tmp/user-management
+352733f0fa4c: Loading layer [==================================================>] 2.293 MB/2.293 MB
+a725aa4d4c34: Loading layer [==================================================>] 61.37 MB/61.37 MB
+64bee900ead7: Loading layer [==================================================>] 34.24 MB/34.24 MB
+Loaded image: user-management:1.0
+```
 
