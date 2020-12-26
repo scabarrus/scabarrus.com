@@ -29,8 +29,5 @@ If you want to load the image proviously on the worker (no registry for the mome
 352733f0fa4c: Loading layer [==================================================>] 2.293 MB/2.293 MB
 a725aa4d4c34: Loading layer [==================================================>] 61.37 MB/61.37 MB
 64bee900ead7: Loading layer [==================================================>] 34.24 MB/34.24 MB
-Loaded image: user-management:1.0
-
-
-`
+Loaded image: user-management:1.0`
 
