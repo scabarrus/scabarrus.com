@@ -18,11 +18,15 @@ This module contains three 4 main project:
 - mutating webhook (not yet)
 
 ## User-managemnt
-To build the image from docker command:<br>
-`# docker build -t user-management:1.0 -f scabarrus.com/k8s.webhook/deployment/Dockerfile . `
+To build the image from docker command:
+```
+# docker build -t user-management:1.0 -f scabarrus.com/k8s.webhook/deployment/Dockerfile . 
+```
 
 If you are on remote VM you can save this image with following command:
-`docker save -o user-management.tar user-management:1.0`
+```
+docker save -o user-management.tar user-management:1.0
+```
 
 If you want to load the image proviously on the worker (no registry for the moment):<br>
 ```
