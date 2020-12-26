@@ -24,7 +24,7 @@ To build the image from docker command:
 If you are on remote VM you can save this image with following command:
 `docker save -o user-management.tar user-management:1.0`
 
-If you want to load the image proviously on the worker (no registry for the moment):
+If you want to load the image proviously on the worker (no registry for the moment):<br>
 `# docker load -i /tmp/user-management
 352733f0fa4c: Loading layer [==================================================>] 2.293 MB/2.293 MB
 a725aa4d4c34: Loading layer [==================================================>] 61.37 MB/61.37 MB
