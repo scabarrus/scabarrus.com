@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
-
 	"github.com/gorilla/mux"
 	"scabarrus.com/k8s.webhook/internal/service"
 )
