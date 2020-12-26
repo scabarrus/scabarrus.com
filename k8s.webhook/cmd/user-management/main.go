@@ -24,7 +24,6 @@ func helloWorld(w http.ResponseWriter,r *http.Request){
 // @host localhost:9443
 // @BasePath /api/v1/
 func main (){
-	os.Setenv("POSTGRES_CON", "user=admin password=password dbname=admin host=192.168.169.129 port=31018 sslmode=disable")
 	r := mux.NewRouter()
 	
 	dbm:=service.DBMigrate{}
