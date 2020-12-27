@@ -18,6 +18,8 @@ This module contains three 4 main project:
 - mutating webhook (not yet)
 
 ## User-managemnt
+
+### Docker image 
 To build the image from docker command:
 ```
 # docker build -t user-management:1.0 -f scabarrus.com/k8s.webhook/deployment/Dockerfile . 
@@ -36,4 +38,13 @@ a725aa4d4c34: Loading layer [==================================================>
 64bee900ead7: Loading layer [==================================================>] 34.24 MB/34.24 MB
 Loaded image: user-management:1.0
 ```
+
+### Deploy application
+```
+kubectl apply -f configmap.yaml
+kubectl apply -f deployment.yaml
+kubectl expose deploy user-management-deploy --name user-management-svc  --type=NodePort
+```
+
+
 
