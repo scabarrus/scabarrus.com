@@ -12,7 +12,7 @@ My lab environment is a minimal K8S cluster with one Master and one Worker (poor
 
 This module contains three 4 main project:
 - user-management 
-- auhtn webhook (not yet)
+- auhtn webhook 
 - authz webhook (not yet)
 - validate webhook (not yet)
 - mutating webhook (not yet)
@@ -43,9 +43,9 @@ Loaded image: user-management:1.0
 
 ### Deploy application
 ```
-kubectl apply -f configmap.yaml
-kubectl apply -f deployment.yaml
-kubectl expose deploy user-management-deploy --name user-management-svc  --type=NodePort
+# kubectl apply -f scabarrus.com/k8s.webhook/deployment/usr-mgt/configmap.yaml
+# kubectl apply -f scabarrus.com/k8s.webhook/deployment/usr-mgt/deployment.yaml
+# kubectl expose deploy user-management-deploy --name user-management-svc  --type=NodePort
 ```
 
 ## Authn webhook
@@ -53,22 +53,56 @@ This webhook just query user-management microservice with bearer token sent when
 
 ### Build the image from source
 ```
-docker build -t authn-webhook:1.0 -f scabarrus.com/k8s.webhook/deployment/authn/Dockerfile .
+# docker build -t authn-webhook:1.0 -f scabarrus.com/k8s.webhook/deployment/authn/Dockerfile .
 ```
 
 ### Save image
 ```
-docker save -o authn-webhook.tar authn-webhook:1.0
+# docker save -o authn-webhook.tar authn-webhook:1.0
 ```
 
 ### Load image
 ```
-docker load -i authn-webhook.tar 
+# docker load -i authn-webhook.tar 
 1fb22cc88687: Loading layer [==================================================>] 2.366 MB/2.366 MB
 468ce57c4203: Loading layer [==================================================>] 127.1 MB/127.1 MB
 8c1406fa31b0: Loading layer [==================================================>]  66.8 MB/66.8 MB
 Loaded image: authn-webhook:1.0
 ```
 
-### 
+### Deploy webhook
+```
+# kubectl apply -f scabarrus.com/k8s.webhook/deployment/authn/configmap.yaml
+# kubectl apply -f scabarrus.com/k8s.webhook/deployment/authn/deployment.yaml
+# kubectl expose deploy authn-webhook-svc --name authn-webhook  --type=NodePort
+```
+## Configure your cluster
+```
+kubeadm init --config scabarrus/k8s.webhook/configs/authn-config.yaml
+```
+You can check inside of kube-apiserver.yaml file that kube-apiserver will have some extra parameters in command section and hostpath volume mounted with the webhook configuration.
+```
+# grep authn /etc/kubernetes/manifests/kube-apiserver.yaml
+    - --authentication-token-webhook-config-file=/etc/authn-config.yaml
+    - mountPath: /etc/authn-config.yaml
+      path: /root/authn-config.yaml
 
+```
+NB: when the kube-apiserver.yaml is modified, automatically api-server is redeployed.
+
+## Create role and binding for user 
+In this example, we will usee a user with login marvel and password.
+```
+kubectl create role admin --verb="*" --resource="*"
+kubectl create rolebinding  marvel --role="admin" --user="marvel"
+```
+
+## Test authentication 
+```
+kubectl --kubeconfig scabarrus/k8s.webhook/configs/admin.conf --user marvel get pod
+NAME                                      READY   STATUS    RESTARTS   AGE
+authn-webhook-98d8b6fdf-7cw7v             1/1     Running   0          27m
+pgadmin-8496757f7b-svg7q                  1/1     Running   1          12d
+pod-webhook-pg                            1/1     Running   1          12d
+user-management-deploy-57dcd4b4dc-ps9mm   1/1     Running   0          47h
+```
