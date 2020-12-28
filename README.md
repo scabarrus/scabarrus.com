@@ -56,4 +56,19 @@ This webhook just query user-management microservice with bearer token sent when
 docker build -t authn-webhook:1.0 -f scabarrus.com/k8s.webhook/deployment/authn/Dockerfile .
 ```
 
+### Save image
+```
+docker save -o authn-webhook.tar authn-webhook:1.0
+```
+
+### Load image
+```
+docker load -i authn-webhook.tar 
+1fb22cc88687: Loading layer [==================================================>] 2.366 MB/2.366 MB
+468ce57c4203: Loading layer [==================================================>] 127.1 MB/127.1 MB
+8c1406fa31b0: Loading layer [==================================================>]  66.8 MB/66.8 MB
+Loaded image: authn-webhook:1.0
+```
+
+### 
 
