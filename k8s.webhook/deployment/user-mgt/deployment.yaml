@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-management-deploy
+  labels:
+    app: user-management
+    func: microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: user-management
+  template:
+    metadata:
+      labels:
+        app: user-management
+    spec:
+      containers:
+        - name: user-management
+          image: user-management:1.0
+          env:
+            - name: POSTGRES_CON
+              valueFrom:
+                configMapKeyRef:
+                  name: usr-mgt-secret
+                  key: POSTGRES_CON
+          ports:
+            - containerPort: 9443
+                   

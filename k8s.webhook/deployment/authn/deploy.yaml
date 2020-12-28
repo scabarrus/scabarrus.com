@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authn-webhook
+  labels:
+    app: authn
+    func: webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authn-webhook
+  template:
+    metadata:
+      name: authn-webhook-pod
+      labels:
+        app: authn-webhook
+    spec:
+      containers:
+        - name: authn-webhook
+          image: authn-webhook:1.0
+          env:
+            - name: USR_API
+              value: "http://192.168.169.129:32137/api/v1/users/"
+            - name: CRT_DIR
+              value: "/go/src/scabarrus.com/k8s.webhook/configs/"
+          ports:
+            - containerPort: 9443

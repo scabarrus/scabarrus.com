@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Role
+metadata:
+    name: admin
+    namespace: user-role
+    resourceVersion: "134615"
+    selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/user-role/roles/dev-namespace-user1
+    uid: 710e3496-f572-407b-a605-d55d805e941f
+  rules:
+  - apiGroups:
+    - ""
+    - extensions
+    - apps
+    resources:
+    - deployments
+    - replicasets
+    - pods
+    verbs:
+    - get
+    - create
+    - update
+    - patch
+    - delete
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+
