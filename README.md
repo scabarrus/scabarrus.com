@@ -18,6 +18,8 @@ This module contains three 4 main project:
 - mutating webhook (not yet)
 
 ## User-managemnt
+This microservices provides endpoint to manage users and groups.
+There is for now no authentication required because it's just as an example.
 
 ### Docker image 
 To build the image from docker command:
@@ -46,5 +48,12 @@ kubectl apply -f deployment.yaml
 kubectl expose deploy user-management-deploy --name user-management-svc  --type=NodePort
 ```
 
+## Authn webhook
+This webhook just query user-management microservice with bearer token sent when a user wants to interact with api-server.
+
+### Build the image from source
+```
+docker build -t authn-webhook:1.0 -f scabarrus.com/k8s.webhook/deployment/authn/Dockerfile .
+```
 
 
