@@ -3,8 +3,7 @@ kind: Config
 clusters:
   - name: authn
     cluster:
-      #server: https://192.168.169.137:9444/
-      server: https://192.168.169.129:30965/
+      server: https://localhost:30965/
       insecure-skip-tls-verify: true
 users:
   - name: kube-apiserver
