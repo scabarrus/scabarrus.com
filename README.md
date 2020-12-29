@@ -4,6 +4,7 @@ This repository contains some projects that help to understand webhook plugin th
 - authorization
 - validation
 - mutating
+![alt text](https://github.com/scabarrus/scabarrus.com/blob/master/image.jpg?raw=true)
 
 ## Lab environment
 My lab environment is a minimal K8S cluster with one Master and one Worker (poor cluster :-)).
