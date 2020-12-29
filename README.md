@@ -9,6 +9,7 @@ This repository contains some projects that help to understand webhook plugin th
 * mutating webhook to apply modify resource on fly
 * validate webhook to check compliance rules of resources managed
 
+An additional microservice called user-management provide API to register in postgres user, groups and roles.
 
 
 ## Lab environment
