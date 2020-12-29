@@ -25,7 +25,7 @@ This module contains three 4 main project:
 - validate webhook (not yet)
 - mutating webhook (not yet)
 
-## User-managemnt
+## User-management
 This microservices provides endpoint to manage users and groups.
 There is for now no authentication required because it's just as an example.
 
