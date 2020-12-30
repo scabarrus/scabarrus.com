@@ -1,4 +1,4 @@
-# scabarrus.com/k8s.webhook
+# scabarrus.com
 This repository contains some projects that help to understand webhook plugin that cant be embeded in a K8S cluster to manage:
 
 ![alt text](https://github.com/scabarrus/scabarrus.com/blob/master/k8s_webhook.PNG)
