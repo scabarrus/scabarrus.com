@@ -29,6 +29,8 @@ This module contains three 4 main project:
 This microservices provides endpoint to manage users and groups.
 There is for now no authentication required because it's just as an example.
 
+A swagger is provided to play with api at following uri: /swagger/index.html
+
 ### Docker image 
 To build the image from docker command:
 ```
