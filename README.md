@@ -7,4 +7,4 @@ Currently, project(s) hosted are:
 ## k8s.webhook
 This package contains some code to understand how kubernetes can be customized with webhook.
 A detailed view with schema is accessible here:
-[k8s.webhook](./blob/master/k8s.webhook/README.md)
+[k8s.webhook](../blob/master/k8s.webhook/README.md)
