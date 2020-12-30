@@ -49,7 +49,7 @@ func main (){
 
 	//Manage user's group
 	groupMemberService:=service.GroupMemberService{}
-	/*r.HandleFunc("/api/v1/groups/{group}/users", helloWorld).Methods("GET")*/
+	r.HandleFunc("/api/v1/groups/{group}/users", groupMemberService.FindAll).Methods("GET")
 	r.HandleFunc("/api/v1/groups/{group}/members", groupMemberService.Save).Methods("POST")
 	r.HandleFunc("/api/v1/groups/{group}/members/{member}", groupMemberService.FindByName).Methods("GET")
 	r.HandleFunc("/api/v1/groups/{group}/members/{member}", groupMemberService.Delete).Methods("DELETE")

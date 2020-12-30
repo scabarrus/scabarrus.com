@@ -712,11 +712,13 @@ var doc = `{
                 "summary": "Create a user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "user name",
+                        "description": "dto",
                         "name": "user",
-                        "in": "path",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserDTO"
+                        }
                     }
                 ],
                 "responses": {
@@ -940,6 +942,19 @@ var doc = `{
                 "user": {
                     "type": "string",
                     "example": "user1"
+                }
+            }
+        },
+        "service.RoleMemberService": {
+            "type": "object",
+            "properties": {
+                "group": {
+                    "type": "string",
+                    "example": "dev"
+                },
+                "role": {
+                    "type": "string",
+                    "example": "role1"
                 }
             }
         }

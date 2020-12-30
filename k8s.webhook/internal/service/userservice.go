@@ -94,7 +94,7 @@ func (u *UserService)FindByName(w http.ResponseWriter, r *http.Request){
 // @Tags users
 // @Accept  json
 // @Produce  json
-// @Param user path string true "user name"
+// @Param user body dto.UserDTO true "dto"
 // @Success 200 {object} dto.UserDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /users [post]

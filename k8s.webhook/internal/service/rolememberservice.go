@@ -25,7 +25,7 @@ type RoleMemberService struct {
 // @Accept  json
 // @Produce  json
 // @Param role path string true "role name"
-// @Param user body GroupMemberService false "dto"
+// @Param role body RoleMemberService true "dto"
 // @Success 200 {object} dto.RoleDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /roles/{role}/members [post]

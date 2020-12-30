@@ -65,6 +65,15 @@ definitions:
         example: user1
         type: string
     type: object
+  service.RoleMemberService:
+    properties:
+      group:
+        example: dev
+        type: string
+      role:
+        example: role1
+        type: string
+    type: object
 host: localhost:9443
 info:
   contact:
@@ -525,11 +534,12 @@ paths:
       - application/json
       description: create a user
       parameters:
-      - description: user name
-        in: path
+      - description: dto
+        in: body
         name: user
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/dto.UserDTO'
       produces:
       - application/json
       responses:
