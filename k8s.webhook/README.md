@@ -31,6 +31,12 @@ There is for now no authentication required because it's just as an example.
 
 A swagger is provided to play with api at following uri: /swagger/index.html
 
+This microservice should be used only as example, because:
+* No authentication is required to add user,group and role (it's very bad)
+* The microservice is not in https 
+* It was written for example and not for production
+* It will be better to use oidc capabilities to manage authentication (perhaps in another repo)
+
 ### Docker image 
 To build the image from docker command:
 ```
