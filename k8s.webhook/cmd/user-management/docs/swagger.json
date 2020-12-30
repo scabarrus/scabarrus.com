@@ -84,47 +84,6 @@
                 }
             }
         },
-        "/groups/{group/members}": {
-            "get": {
-                "description": "find all roles",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "groups"
-                ],
-                "summary": "Find all members",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "group name",
-                        "name": "group",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "dto",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.GroupDTO"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/error.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/groups/{group}": {
             "get": {
                 "description": "get a group by it's name",
@@ -236,6 +195,45 @@
             }
         },
         "/groups/{group}/members": {
+            "get": {
+                "description": "find all roles",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Find all members",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group name",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "dto",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.GroupDTO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "create a member's group",
                 "consumes": [

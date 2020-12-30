@@ -122,33 +122,6 @@ paths:
       summary: Create a group
       tags:
       - groups
-  /groups/{group/members}:
-    get:
-      consumes:
-      - application/json
-      description: find all roles
-      parameters:
-      - description: group name
-        in: path
-        name: group
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: dto
-          schema:
-            items:
-              $ref: '#/definitions/dto.GroupDTO'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.Error'
-      summary: Find all members
-      tags:
-      - groups
   /groups/{group}:
     delete:
       consumes:
@@ -223,6 +196,32 @@ paths:
       tags:
       - groups
   /groups/{group}/members:
+    get:
+      consumes:
+      - application/json
+      description: find all roles
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            items:
+              $ref: '#/definitions/dto.GroupDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Find all members
+      tags:
+      - groups
     post:
       consumes:
       - application/json

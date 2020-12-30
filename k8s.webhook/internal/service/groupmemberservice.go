@@ -206,7 +206,7 @@ func (m *GroupMemberService)FindByName(w http.ResponseWriter, r * http.Request){
 // @Param group path string true "group name"
 // @Success 200 {object} []dto.GroupDTO true "dto"
 // @Success 400 {object} format.Error
-// @Router /groups/{group/members} [get]
+// @Router /groups/{group}/members [get]
 func (m *GroupMemberService)FindAll(w http.ResponseWriter, r * http.Request){
 	pg := repository.Postgres{}
 	pg.Initialization()
