@@ -22,9 +22,11 @@ func (g *Group) AssociationCreate(db *gorm.DB)(* gorm.DB){
 
 }
 
-func (g *Group) AssociationDelete(db *gorm.DB)(* gorm.DB){
-	return db.Session(&gorm.Session{FullSaveAssociations: true}).Delete(&g)
+func (g *Group)  AssociationDelete(db *gorm.DB,u User)(error){
+	//return db.Session(&gorm.Session{FullSaveAssociations: true}).Delete(&g)
+	return db.Model(&g).Association("Users").Delete(u)
 }
+
 
 func (g *Group) AssociationFindByName(db *gorm.DB)(* gorm.DB){
 	return db.Session(&gorm.Session{FullSaveAssociations: true}).Find(&g)

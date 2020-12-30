@@ -14,6 +14,7 @@ type User struct {
 	ID uint 
 }
 
+//Factory method
 func (u User)DTO(uid int,user string, password string)(User){
 	return User{UID:uid,User:user,Password:password}
 }
@@ -30,12 +31,14 @@ func (u *User) AssociationCreate(db *gorm.DB)(* gorm.DB){
 
 }
 
-func (u *User) AssociationDelete(db *gorm.DB)(* gorm.DB){
-	return db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&u).Delete(&u)
+func (u *User) AssociationDelete(db *gorm.DB, g Group)(error){
+	//return db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&u).Delete(&u)
+	return db.Model(&u).Association("Groups").Delete(g)
 }
 
 func (u *User) AssociationFindByName(db *gorm.DB)(* gorm.DB){
 	return db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&u).Find(&u)
+	
 }
 //FindAll is method to find all users
 func (u *User) FindAll(db *gorm.DB)(* gorm.DB,[]User){

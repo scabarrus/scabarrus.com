@@ -1,0 +1,621 @@
+basePath: /api/v1/
+definitions:
+  dto.GroupDTO:
+    properties:
+      description:
+        example: Operator group
+        type: string
+      gid:
+        example: 7001
+        type: integer
+      group:
+        example: operator
+        type: string
+    type: object
+  dto.RoleDTO:
+    properties:
+      group:
+        type: string
+      groups:
+        items:
+          $ref: '#/definitions/dto.GroupDTO'
+        type: array
+      namespace:
+        type: string
+      resource:
+        type: string
+      role:
+        type: string
+      verb:
+        type: string
+    type: object
+  dto.UserDTO:
+    properties:
+      groups:
+        items:
+          $ref: '#/definitions/dto.GroupDTO'
+        type: array
+      password:
+        example: B67zuopX#2
+        type: string
+      uid:
+        example: 5000
+        type: integer
+      user:
+        example: user1
+        type: string
+    type: object
+  error.Error:
+    properties:
+      details:
+        type: string
+      message:
+        type: string
+      path:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  service.GroupMemberService:
+    properties:
+      group:
+        example: operator
+        type: string
+      user:
+        example: user1
+        type: string
+    type: object
+host: localhost:9443
+info:
+  contact:
+    email: scabarrus@gmail.com
+    name: scabarrus
+  description: This is a sample serice for managing user and role for kubernetes cluster
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: User-Management API
+  version: "1.0"
+paths:
+  /groups:
+    get:
+      consumes:
+      - application/json
+      description: get all groups
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.GroupDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Show all groups
+      tags:
+      - groups
+    post:
+      consumes:
+      - application/json
+      description: create a group
+      parameters:
+      - description: dto
+        in: body
+        name: group
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GroupDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.GroupDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Create a group
+      tags:
+      - groups
+  /groups/{group/members}:
+    get:
+      consumes:
+      - application/json
+      description: find all roles
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            items:
+              $ref: '#/definitions/dto.GroupDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Find all members
+      tags:
+      - groups
+  /groups/{group}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a group
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GroupDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Delete a group
+      tags:
+      - groups
+    get:
+      consumes:
+      - application/json
+      description: get a group by it's name
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.GroupDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Show a group details
+      tags:
+      - groups
+    put:
+      consumes:
+      - application/json
+      description: modify a group
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.GroupDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Modify a group
+      tags:
+      - groups
+  /groups/{group}/members:
+    post:
+      consumes:
+      - application/json
+      description: create a member's group
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      - description: dto
+        in: body
+        name: user
+        schema:
+          $ref: '#/definitions/service.GroupMemberService'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Create a member's group
+      tags:
+      - groups
+  /groups/{group}/members/{member}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a member's group
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      - description: member name
+        in: path
+        name: member
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Delete a member's group
+      tags:
+      - groups
+    get:
+      consumes:
+      - application/json
+      description: find a member's group by it's name
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      - description: member name
+        in: path
+        name: member
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Find a member's group by it's name
+      tags:
+      - groups
+  /roles:
+    get:
+      consumes:
+      - application/json
+      description: get all roles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Show all roles
+      tags:
+      - roles
+    post:
+      consumes:
+      - application/json
+      description: create a role
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Create a role
+      tags:
+      - roles
+  /roles/{role}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a role
+      parameters:
+      - description: role name
+        in: path
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Delete a role details
+      tags:
+      - roles
+    get:
+      consumes:
+      - application/json
+      description: get a role by it's name
+      parameters:
+      - description: role name
+        in: path
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Show a role details
+      tags:
+      - roles
+    put:
+      consumes:
+      - application/json
+      description: modify a role
+      parameters:
+      - description: role name
+        in: path
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Modify a role details
+      tags:
+      - roles
+  /roles/{role}/members:
+    get:
+      consumes:
+      - application/json
+      description: find all roles
+      parameters:
+      - description: role name
+        in: path
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            items:
+              $ref: '#/definitions/dto.RoleDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Find all roles
+      tags:
+      - roles
+    post:
+      consumes:
+      - application/json
+      description: create a member's group
+      parameters:
+      - description: role name
+        in: path
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Create a member's group
+      tags:
+      - roles
+  /roles/{role}/members/{member}:
+    get:
+      consumes:
+      - application/json
+      description: find a member's role by it's name
+      parameters:
+      - description: role name
+        in: path
+        name: role
+        required: true
+        type: string
+      - description: member name
+        in: path
+        name: member
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Find a member's role by it's name
+      tags:
+      - roles
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Show all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: create a user
+      parameters:
+      - description: user name
+        in: path
+        name: user
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Create a user
+      tags:
+      - users
+  /users/{user}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a user
+      parameters:
+      - description: user name
+        in: path
+        name: user
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Delete a user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: get a user by it's name
+      parameters:
+      - description: user name
+        in: path
+        name: user
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Show a user details
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: modify a user
+      parameters:
+      - description: user name
+        in: path
+        name: user
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Modify a user
+      tags:
+      - users
+swagger: "2.0"

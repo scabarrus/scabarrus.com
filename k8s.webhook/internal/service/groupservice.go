@@ -21,15 +21,15 @@ type GroupService struct {
 }
 
 
-// FindByAll godoc
-// @Summary Retrieve all groups
-// @Description Get details of all groups
+// FindAll godoc
+// @Summary Show all groups
+// @Description get all groups
 // @Tags groups
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} Groups
-// @Router /api/v1/groups [get]
-// FindAll is a method to retrieve all Group 
+// @Success 200 {object} dto.GroupDTO true "dto"
+// @Success 400 {object} format.Error
+// @Router /groups [get]
 func (u *GroupService)FindAll(w http.ResponseWriter, r *http.Request){
 	pg := repository.Postgres{}
 	pg.Initialization()
@@ -55,14 +55,15 @@ func (u *GroupService)FindAll(w http.ResponseWriter, r *http.Request){
 }
 
 // FindByName godoc
-// @Summary Retrieve a group by name
-// @Description Get details of a group
+// @Summary Show a group details
+// @Description get a group by it's name
 // @Tags groups
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} Groups
-// @Router /api/v1/groups/{group} [get]
-// FindByName is a method to retrieve an Group by his name
+// @Param group path string true "group name"
+// @Success 200 {object} dto.GroupDTO true "dto"
+// @Success 400 {object} format.Error
+// @Router /groups/{group} [get]
 func (u *GroupService)FindByName(w http.ResponseWriter, r *http.Request){
 	pg := repository.Postgres{}
 	pg.Initialization()
@@ -84,14 +85,15 @@ func (u *GroupService)FindByName(w http.ResponseWriter, r *http.Request){
 }
 
 // Save godoc
-// @Summary Create a group 
-// @Description Create a group
+// @Summary Create a group
+// @Description create a group
 // @Tags groups
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} Group
-// @Router /api/v1/groups/{group} [post]
-// Save is a method to implement Group creation logic
+// @Param group body dto.GroupDTO true "dto"
+// @Success 200 {object} dto.GroupDTO true "dto"
+// @Success 400 {object} format.Error
+// @Router /groups [post]
 func (u *GroupService)Save(w http.ResponseWriter, r * http.Request){
 	pg := repository.Postgres{}
 	groupDTO := dto.GroupDTO{}
@@ -117,13 +119,14 @@ func (u *GroupService)Save(w http.ResponseWriter, r * http.Request){
 
 // Modify godoc
 // @Summary Modify a group
-// @Description Modify a group
-// @Tags Groups
+// @Description modify a group
+// @Tags groups
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} Group
-// @Router /api/v1/groups/{group} [put]
-// Modify is a method to modify an Group by his name
+// @Param group path string true "group name"
+// @Success 200 {object} dto.GroupDTO true "dto"
+// @Success 400 {object} format.Error
+// @Router /groups/{group} [put]
 func (u *GroupService)Modify(w http.ResponseWriter, r *http.Request){
 	pg := repository.Postgres{}
 	pg.Initialization()
@@ -148,14 +151,15 @@ func (u *GroupService)Modify(w http.ResponseWriter, r *http.Request){
 }
 
 // Delete godoc
-// @Summary Delete a group 
-// @Description Delete a group
+// @Summary Delete a group
+// @Description delete a group
 // @Tags groups
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} Group
-// @Router /api/v1/groups/{group} [delete]
-// Delete is a method to delete an Group by his name
+// @Param group path string true "group name"
+// @Success 200 {object} dto.GroupDTO
+// @Success 400 {object} format.Error
+// @Router /groups/{group} [delete]
 func (u *GroupService)Delete(w http.ResponseWriter, r *http.Request){
 	pg := repository.Postgres{}
 	pg.Initialization()

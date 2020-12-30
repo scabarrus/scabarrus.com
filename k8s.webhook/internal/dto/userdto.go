@@ -6,9 +6,9 @@ import (
 
 // UserDTO is a struct for DTO User
 type UserDTO struct {
-	UID int `json:"uid" mandatory:"true"`
-	User string `json:"user" mandatory:"true"`
-	Password string `json:"password" mandatory:"true"`
+	UID int `json:"uid" mandatory:"true" example:"5000"`
+	User string `json:"user" mandatory:"true" example:"user1"`
+	Password string `json:"password" mandatory:"true" example:"B67zuopX#2"`
 	Groups []GroupDTO
 
 }

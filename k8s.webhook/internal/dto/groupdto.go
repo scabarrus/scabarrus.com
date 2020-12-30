@@ -4,9 +4,9 @@ import "scabarrus.com/k8s.webhook/internal/domain"
 
 // GroupDTO is a struct that provide business service implementation
 type GroupDTO struct {
-	GID int `json:"gid" mandatory:"true"`
-	Group string `json:"group" mandatory:"true"`
-	Description string `json:"description"`
+	GID int `json:"gid" mandatory:"true" example:"7001"`
+	Group string `json:"group" mandatory:"true" example:"operator"`
+	Description string `json:"description" example:"Operator group"`
 
 }
 
