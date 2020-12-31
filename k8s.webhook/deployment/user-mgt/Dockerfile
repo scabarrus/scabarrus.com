@@ -12,7 +12,6 @@ COPY ./scabarrus.com ./scabarrus.com
 
 RUN cd scabarrus.com/k8s.webhook ; go mod init; go mod vendor
 
-RUN ls -lR .
 # Build the Go app
 RUN go build -o main  scabarrus.com/k8s.webhook/cmd/user-management
 
