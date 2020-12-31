@@ -12,6 +12,7 @@ COPY ./scabarrus.com ./scabarrus.com
 
 RUN cd scabarrus.com/k8s.webhook ; go mod init; go mod vendor
 
+RUN go get -u github.com/swaggo/swag/cmd/swag;cd scabarrus.com/k8s.webhook/cmd/user-management;swag init --parseDependency -g .\main.go --host "localhost:9943"
 # Build the Go app
 RUN go build -o main  scabarrus.com/k8s.webhook/cmd/user-management
 

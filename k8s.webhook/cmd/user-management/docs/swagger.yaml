@@ -74,7 +74,6 @@ definitions:
         example: role1
         type: string
     type: object
-host: localhost:9443
 info:
   contact:
     email: scabarrus@gmail.com

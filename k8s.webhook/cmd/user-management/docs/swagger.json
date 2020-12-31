@@ -14,7 +14,6 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:9443",
     "basePath": "/api/v1/",
     "paths": {
         "/groups": {
