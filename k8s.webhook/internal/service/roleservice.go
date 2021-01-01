@@ -163,7 +163,7 @@ func (r *RoleService)Modify(w http.ResponseWriter, req *http.Request){
 			w.WriteHeader(http.StatusBadRequest)
 		}else{	
 			if result.RowsAffected == 0{
-				e.FormatError("Input Error - ","Non editable field are modified!",r.RequestURI)
+				e.FormatError("Input Error - ","Non editable field are modified!",req.RequestURI)
 				json.NewEncoder(w).Encode(e)
 				w.WriteHeader(http.StatusBadRequest)
 			}else{
