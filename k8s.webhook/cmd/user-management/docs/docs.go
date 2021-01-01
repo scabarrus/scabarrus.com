@@ -150,6 +150,15 @@ var doc = `{
                 "summary": "Modify a group",
                 "parameters": [
                     {
+                        "description": "dto",
+                        "name": "groupdto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.GroupDTO"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "group name",
                         "name": "group",

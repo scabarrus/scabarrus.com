@@ -102,18 +102,24 @@ func (u *GroupService)Save(w http.ResponseWriter, r * http.Request){
 	initDB.DBMigrate(pg.Database)
 	
 	_=json.NewDecoder(r.Body).Decode(&groupDTO)
-
+	var e format.Error
 	groupRepo := domain.Group{}.DTO(groupDTO.GID,groupDTO.Group,groupDTO.Description)
 	w.Header().Set("Content-Type", "application/json")
-	result:=groupRepo.Save(pg.Database)
-	if result.Error != nil{
-		var e format.Error
-		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
+	message,details,_ :=e.Unmarshal(&groupDTO)
+    if message != "" {
+		e.FormatError(message,details,r.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
-		groupDTO.Convert(groupRepo)
-		json.NewEncoder(w).Encode(groupDTO)
+		result:=groupRepo.Save(pg.Database)
+		if result.Error != nil{
+			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
+			json.NewEncoder(w).Encode(e)
+			w.WriteHeader(http.StatusBadRequest)
+		}else{
+			groupDTO.Convert(groupRepo)
+			json.NewEncoder(w).Encode(groupDTO)
+		}
 	}
 } 
 
@@ -123,6 +129,7 @@ func (u *GroupService)Save(w http.ResponseWriter, r * http.Request){
 // @Tags groups
 // @Accept  json
 // @Produce  json
+// @Param groupdto body dto.GroupDTO true "dto"
 // @Param group path string true "group name"
 // @Success 200 {object} dto.GroupDTO true "dto"
 // @Success 400 {object} format.Error
@@ -134,20 +141,40 @@ func (u *GroupService)Modify(w http.ResponseWriter, r *http.Request){
 	
 	_=json.NewDecoder(r.Body).Decode(&groupDTO)
 
-
-	groupRepo := domain.Group{}.DTO(groupDTO.GID,groupDTO.Group,groupDTO.Description)
+	vars := mux.Vars(r)
+	group := vars["group"]
+	var e format.Error
 	w.Header().Set("Content-Type", "application/json")
-	result:=groupRepo.Modify(pg.Database)
-	if result.Error != nil{
-		var e format.Error
-		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
+	if group != groupDTO.Group{
+		
+		e.FormatError("input Error - ","mismatch between group name in path ("+group+") and body ("+groupDTO.Group+")",r.RequestURI)
 		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
-	}else {
-		groupDTO.Convert(groupRepo)
-		json.NewEncoder(w).Encode(groupDTO)
 	}
-
+	message,details,_ :=e.Unmarshal(&groupDTO)
+    if message != "" {
+		e.FormatError(message,details,r.RequestURI)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
+	}else{
+		groupRepo := domain.Group{}.DTO(groupDTO.GID,groupDTO.Group,groupDTO.Description)
+		result:=groupRepo.Modify(pg.Database)
+		if result.Error != nil{
+			var e format.Error
+			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
+			json.NewEncoder(w).Encode(e)
+			w.WriteHeader(http.StatusBadRequest)
+		}else {
+			if result.RowsAffected == 0{
+				e.FormatError("Input Error - ","Non editable field are modified!",r.RequestURI)
+				json.NewEncoder(w).Encode(e)
+				w.WriteHeader(http.StatusBadRequest)
+			}else{
+				groupDTO.Convert(groupRepo)
+				json.NewEncoder(w).Encode(groupDTO)
+			}
+		}
+	}
 }
 
 // Delete godoc

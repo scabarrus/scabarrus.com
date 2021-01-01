@@ -184,6 +184,12 @@ paths:
       - application/json
       description: modify a group
       parameters:
+      - description: dto
+        in: body
+        name: groupdto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GroupDTO'
       - description: group name
         in: path
         name: group

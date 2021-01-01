@@ -52,7 +52,7 @@ func (g *Group) FindByName(db *gorm.DB) *gorm.DB {
 
 //Modify is method to update an Group
 func (g *Group) Modify(db *gorm.DB) *gorm.DB {
-	return db.Debug().Where("\"gid\"=?", g.GID).Updates(&g)
+	return db.Debug().Where("\"g_id\"=?", g.GID).Updates(&g)
 }
 
 //Delete is method to remove an Group

@@ -13,11 +13,11 @@ import (
 )
 
 type RoleService struct {
-	Role string `json:"role" example:"role1"`
-	Namespace string `json:"namespace" example:"default"`
-	Verb string `json:"verb" example:"list"`
-	Group string `json:"group" example:"apps"`
-	Resource string `json:"resource" example:"namespace"`
+	Role string `json:"role" example:"role1" mandatory:"true"`
+	Namespace string `json:"namespace" example:"default" mandatory:"true"`
+	Verb string `json:"verb" example:"list" mandatory:"true"`
+	Group string `json:"group" example:"apps" mandatory:"true"`
+	Resource string `json:"resource" example:"namespace" mandatory:"true"`
 	Groups GroupService
 }
 
@@ -92,25 +92,33 @@ func (r *RoleService)FindByName(w http.ResponseWriter, req *http.Request){
 // @Tags roles
 // @Accept  json
 // @Produce  json
+// @Param role body dto.RoleDTO true "dto"
 // @Success 200 {object} dto.RoleDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /roles [post]
 func (r *RoleService)Save(w http.ResponseWriter, req * http.Request){
 	pg := repository.Postgres{}
 	roleDTO := dto.RoleDTO{}
+	var e format.Error
 	pg.Initialization()
 		_=json.NewDecoder(req.Body).Decode(&roleDTO)
 	fmt.Println("roleDTO : ",roleDTO)
 	roleRepo := domain.Role{}.DTO(roleDTO.Role,roleDTO.Namespace,roleDTO.Verb,roleDTO.Group,roleDTO.Resource)
 	w.Header().Set("Content-Type", "application/json")
-	result:=roleRepo.Save(pg.Database)
-	if result.Error != nil{
-		var e format.Error
-		e.FormatError("SQL Error - ",result.Error.Error(),req.RequestURI)
+	message,details,_ :=e.Unmarshal(&roleDTO)
+    if message != "" {
+		e.FormatError(message,details,req.RequestURI)
+		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(e)
 	}else{
-		roleDTO.Convert(roleRepo)
-		json.NewEncoder(w).Encode(roleDTO)
+		result:=roleRepo.Save(pg.Database)
+		if result.Error != nil{
+			e.FormatError("SQL Error - ",result.Error.Error(),req.RequestURI)
+			json.NewEncoder(w).Encode(e)
+		}else{
+			roleDTO.Convert(roleRepo)
+			json.NewEncoder(w).Encode(roleDTO)
+		}
 	}
 } 
 
@@ -121,6 +129,7 @@ func (r *RoleService)Save(w http.ResponseWriter, req * http.Request){
 // @Tags roles
 // @Accept  json
 // @Produce  json
+// @Param role body dto.RoleDTO true "dto"
 // @Param role path string true "role name"
 // @Success 200 {object} dto.RoleDTO true "dto"
 // @Success 400 {object} format.Error
@@ -131,19 +140,37 @@ func (r *RoleService)Modify(w http.ResponseWriter, req *http.Request){
 	roleDTO := dto.RoleDTO{}
 	
 	_=json.NewDecoder(req.Body).Decode(&roleDTO)
-
-
 	roleRepo := domain.Role{}.DTO(roleDTO.Role,roleDTO.Namespace,roleDTO.Verb,roleDTO.Group,roleDTO.Resource)
 	w.Header().Set("Content-Type", "application/json")
-	result:=roleRepo.Modify(pg.Database)
-	if result.Error != nil{
-		var e format.Error
-		e.FormatError("SQL Error - ",result.Error.Error(),req.RequestURI)
-		json.NewEncoder(w).Encode(e)
+	vars := mux.Vars(req)
+	role := vars["role"]
+	var e format.Error
+	if r.Role != roleDTO.Role{
+			e.FormatError("input Error - ","mismatch between role name in path ("+role+") and body ("+roleDTO.Role+")",req.RequestURI)
+			json.NewEncoder(w).Encode(e)
+			w.WriteHeader(http.StatusBadRequest)
+	}
+	message,details,_ :=e.Unmarshal(&roleDTO)
+    if message != "" {
+		e.FormatError(message,details,req.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
-	}else{	
-		roleDTO.Convert(roleRepo)
-		json.NewEncoder(w).Encode(roleDTO)
+		json.NewEncoder(w).Encode(e)
+	}else{
+		result:=roleRepo.Modify(pg.Database)
+		if result.Error != nil{
+			e.FormatError("SQL Error - ",result.Error.Error(),req.RequestURI)
+			json.NewEncoder(w).Encode(e)
+			w.WriteHeader(http.StatusBadRequest)
+		}else{	
+			if result.RowsAffected == 0{
+				e.FormatError("Input Error - ","Non editable field are modified!",r.RequestURI)
+				json.NewEncoder(w).Encode(e)
+				w.WriteHeader(http.StatusBadRequest)
+			}else{
+				roleDTO.Convert(roleRepo)
+				json.NewEncoder(w).Encode(roleDTO)
+			}
+		}
 	}
 }
 

@@ -14,7 +14,7 @@ import (
 
 // GroupService is a struct that provide business service implementation
 type GroupMemberService struct {
-		User string `json:"user" example:"user1"`
+		User string `json:"user" example:"user1" mandatory:"true"`
 		Group string `json:"group" example:"operator"`
 }
 
@@ -37,43 +37,53 @@ func (m *GroupMemberService)Save(w http.ResponseWriter, r * http.Request){
 	vars := mux.Vars(r)
 	group := vars["group"]
 	_=json.NewDecoder(r.Body).Decode(&m)
-
-	groupRepo :=domain.Group{Group:group}
-	userRepo :=domain.User{User:m.User}
-	ListGroupRepo :=[]domain.Group{}
+	var e format.Error
 	w.Header().Set("Content-Type", "application/json")
-	result:=groupRepo.FindByName(pg.Database)
-	if result.Error != nil{
-		var e format.Error
-		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
+	if group != m.Group{
+			e.FormatError("input Error - ","mismatch between group name in path ("+group+") and body ("+m.Group+")",r.RequestURI)
+			json.NewEncoder(w).Encode(e)
+			w.WriteHeader(http.StatusBadRequest)
+	}
+	message,details,_ :=e.Unmarshal(&m)
+    if message != "" {	
+		e.FormatError(message,details,r.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
-		result=userRepo.FindByName(pg.Database)
+		groupRepo :=domain.Group{Group:group}
+		userRepo :=domain.User{User:m.User}
+		ListGroupRepo :=[]domain.Group{}
+		result:=groupRepo.FindByName(pg.Database)
 		if result.Error != nil{
-			var e format.Error
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
 			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
 		}else{
-			fmt.Println("Group : ", groupRepo.ID)
-			fmt.Println("User: ", userRepo.ID)
-			ListGroupRepo=append(ListGroupRepo,groupRepo)		
-			joinRepo:= domain.User{User:m.User,Groups: ListGroupRepo}
-
-			fmt.Println("Join : ",joinRepo)
-			result=joinRepo.AssociationCreate(pg.Database)
+			result=userRepo.FindByName(pg.Database)
 			if result.Error != nil{
-				var e format.Error
 				e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-				w.WriteHeader(http.StatusBadRequest)
 				json.NewEncoder(w).Encode(e)
-				
+				w.WriteHeader(http.StatusBadRequest)
 			}else{
-				userRepo.FindByName(pg.Database)
-				userDTO := dto.UserDTO{}
-				userDTO.Convert(userRepo)
-				json.NewEncoder(w).Encode(userDTO)
+				fmt.Println("Group : ", groupRepo.ID)
+				fmt.Println("User: ", userRepo.ID)
+				ListGroupRepo=append(ListGroupRepo,groupRepo)		
+				joinRepo:= domain.User{User:m.User,Groups: ListGroupRepo}
+
+				fmt.Println("Join : ",joinRepo)
+				result=joinRepo.AssociationCreate(pg.Database)
+				if result.Error != nil{
+					var e format.Error
+					e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
+					w.WriteHeader(http.StatusBadRequest)
+					json.NewEncoder(w).Encode(e)
+					
+				}else{
+					userRepo.FindByName(pg.Database)
+					userDTO := dto.UserDTO{}
+					userDTO.Convert(userRepo)
+					json.NewEncoder(w).Encode(userDTO)
+				}
 			}
 		}
 	}

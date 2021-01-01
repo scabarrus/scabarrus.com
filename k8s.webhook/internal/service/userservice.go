@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -102,18 +101,25 @@ func (u *UserService)Save(w http.ResponseWriter, r * http.Request){
 	pg := repository.Postgres{}
 	userDTO := dto.UserDTO{}
 	pg.Initialization()
-		_=json.NewDecoder(r.Body).Decode(&userDTO)
-	fmt.Println("userDTO : ",userDTO)
-	userRepo := domain.User{}.DTO(userDTO.UID,userDTO.User,userDTO.Password)
-	w.Header().Set("Content-Type", "application/json")
-	result:=userRepo.Save(pg.Database)
-	if result.Error != nil{
-		var e format.Error
-		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
+	_=json.NewDecoder(r.Body).Decode(&userDTO)
+
+	var e format.Error
+	message,details,_ :=e.Unmarshal(&userDTO)
+    if message != "" {
+		e.FormatError(message,details,r.RequestURI)
+		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(e)
 	}else{
-		userDTO.Convert(userRepo)
-		json.NewEncoder(w).Encode(userDTO)
+		userRepo := domain.User{}.DTO(userDTO.UID,userDTO.User,userDTO.Password)
+		w.Header().Set("Content-Type", "application/json")
+		result:=userRepo.Save(pg.Database)
+		if result.Error != nil{
+			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
+			json.NewEncoder(w).Encode(e)
+		}else{
+			userDTO.Convert(userRepo)
+			json.NewEncoder(w).Encode(userDTO)
+		}
 	}
 } 
 
@@ -135,19 +141,37 @@ func (u *UserService)Modify(w http.ResponseWriter, r *http.Request){
 	userDTO := dto.UserDTO{}
 	
 	_=json.NewDecoder(r.Body).Decode(&userDTO)
-
-
+	var e format.Error
+	vars := mux.Vars(r)
 	userRepo := domain.User{}.DTO(userDTO.UID,userDTO.User,userDTO.Password)
 	w.Header().Set("Content-Type", "application/json")
-	result:=userRepo.Modify(pg.Database)
-	if result.Error != nil{
-		var e format.Error
-		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
+	user := vars["user"]
+	if user != userDTO.User{
+			e.FormatError("input Error - ","mismatch between user name in path ("+user+") and body ("+userDTO.User+")",r.RequestURI)
+			json.NewEncoder(w).Encode(e)
+			w.WriteHeader(http.StatusBadRequest)
+	}
+	message,details,_ :=e.Unmarshal(&userDTO)
+    if message != "" {
+		e.FormatError(message,details,r.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
-	}else{	
-		userDTO.Convert(userRepo)
-		json.NewEncoder(w).Encode(userDTO)
+		json.NewEncoder(w).Encode(e)
+	}else{
+		result:=userRepo.Modify(pg.Database)
+		if result.Error != nil{
+			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
+			json.NewEncoder(w).Encode(e)
+			w.WriteHeader(http.StatusBadRequest)
+		}else{
+			if result.RowsAffected == 0{
+				e.FormatError("Input Error - ","Non editable field are modified!",r.RequestURI)
+				json.NewEncoder(w).Encode(e)
+				w.WriteHeader(http.StatusBadRequest)
+			}else{
+				userDTO.Convert(userRepo)
+				json.NewEncoder(w).Encode(userDTO)
+			}
+		}
 	}
 }
 
