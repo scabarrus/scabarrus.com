@@ -27,7 +27,7 @@ Loaded image: user-management:1.0
 NB: in my example, I don't have ingress then it's why I use node port.
 
 You can access to the swagger by following url:
-http://<worker ip address>:<node port>/swagger/index.html
+http://{worker ip address}:{node port}/swagger/index.html
 
 ```
 # kubectl logs -f user-management-deploy-585f9846f6-28c2z
