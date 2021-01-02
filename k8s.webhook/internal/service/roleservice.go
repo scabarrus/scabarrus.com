@@ -75,8 +75,8 @@ func (r *RoleService)FindByName(w http.ResponseWriter, req *http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),req.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		roleDTO := dto.RoleDTO{}
 		fmt.Println("find by name response: ",roleRepo)
@@ -147,8 +147,8 @@ func (r *RoleService)Modify(w http.ResponseWriter, req *http.Request){
 	var e format.Error
 	if r.Role != roleDTO.Role{
 			e.FormatError("input Error - ","mismatch between role name in path ("+role+") and body ("+roleDTO.Role+")",req.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 	}
 	message,details,_ :=e.Unmarshal(&roleDTO)
     if message != "" {
@@ -159,13 +159,13 @@ func (r *RoleService)Modify(w http.ResponseWriter, req *http.Request){
 		result:=roleRepo.Modify(pg.Database)
 		if result.Error != nil{
 			e.FormatError("SQL Error - ",result.Error.Error(),req.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else{	
 			if result.RowsAffected == 0{
 				e.FormatError("Input Error - ","Non editable field are modified!",req.RequestURI)
-				json.NewEncoder(w).Encode(e)
 				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(e)
 			}else{
 				roleDTO.Convert(roleRepo)
 				json.NewEncoder(w).Encode(roleDTO)
@@ -195,8 +195,8 @@ func (r *RoleService)Delete(w http.ResponseWriter, req *http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),req.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		roleDTO := dto.RoleDTO{}
 		roleDTO.Convert(roleRepo)

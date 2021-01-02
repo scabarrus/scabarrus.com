@@ -43,8 +43,9 @@ func (u *UserService)FindAll(w http.ResponseWriter, r *http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
+		
 	}else{
 		listDTO := []dto.UserDTO{}
 		for _,user := range userList{
@@ -78,8 +79,9 @@ func (u *UserService)FindByName(w http.ResponseWriter, r *http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
+		
 	}else{
 		userDTO := dto.UserDTO{}
 		userDTO.Convert(userRepo)
@@ -160,13 +162,13 @@ func (u *UserService)Modify(w http.ResponseWriter, r *http.Request){
 		result:=userRepo.Modify(pg.Database)
 		if result.Error != nil{
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else{
 			if result.RowsAffected == 0{
 				e.FormatError("Input Error - ","Non editable field are modified!",r.RequestURI)
-				json.NewEncoder(w).Encode(e)
 				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(e)	
 			}else{
 				userDTO.Convert(userRepo)
 				json.NewEncoder(w).Encode(userDTO)

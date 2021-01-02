@@ -324,6 +324,25 @@ paths:
       summary: Find a member's group by it's name
       tags:
       - groups
+  /healthz:
+    get:
+      consumes:
+      - application/json
+      description: send OK if it database connexion works
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: healthcheck
+      tags:
+      - healthz
   /roles:
     get:
       consumes:
@@ -347,6 +366,13 @@ paths:
       consumes:
       - application/json
       description: create a role
+      parameters:
+      - description: dto
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RoleDTO'
       produces:
       - application/json
       responses:
@@ -415,6 +441,12 @@ paths:
       - application/json
       description: modify a role
       parameters:
+      - description: dto
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RoleDTO'
       - description: role name
         in: path
         name: role

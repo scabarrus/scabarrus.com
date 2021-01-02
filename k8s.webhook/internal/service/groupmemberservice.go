@@ -41,8 +41,8 @@ func (m *GroupMemberService)Save(w http.ResponseWriter, r * http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	if group != m.Group{
 			e.FormatError("input Error - ","mismatch between group name in path ("+group+") and body ("+m.Group+")",r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 	}
 	message,details,_ :=e.Unmarshal(&m)
     if message != "" {	
@@ -56,14 +56,14 @@ func (m *GroupMemberService)Save(w http.ResponseWriter, r * http.Request){
 		result:=groupRepo.FindByName(pg.Database)
 		if result.Error != nil{
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else{
 			result=userRepo.FindByName(pg.Database)
 			if result.Error != nil{
 				e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-				json.NewEncoder(w).Encode(e)
 				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(e)
 			}else{
 				fmt.Println("Group : ", groupRepo.ID)
 				fmt.Println("User: ", userRepo.ID)
@@ -116,15 +116,15 @@ func (m *GroupMemberService)Delete(w http.ResponseWriter, r * http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		result=userRepo.FindByName(pg.Database)
 		if result.Error != nil{
 			var e format.Error
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else{
 			fmt.Println("Group : ", groupRepo.ID)
 			fmt.Println("User: ", userRepo.ID)
@@ -175,15 +175,15 @@ func (m *GroupMemberService)FindByName(w http.ResponseWriter, r * http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		result=userRepo.FindByName(pg.Database)
 		if result.Error != nil{
 			var e format.Error
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else{
 			fmt.Println("Group : ", groupRepo.ID)
 			fmt.Println("User: ", userRepo.ID)
@@ -233,15 +233,15 @@ func (m *GroupMemberService)FindAll(w http.ResponseWriter, r * http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		result=userRepo.FindByName(pg.Database)
 		if result.Error != nil{
 			var e format.Error
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else{
 			fmt.Println("Group : ", groupRepo.ID)
 			fmt.Println("User: ", userRepo.ID)

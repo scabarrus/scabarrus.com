@@ -391,6 +391,35 @@ var doc = `{
                 }
             }
         },
+        "/healthz": {
+            "get": {
+                "description": "send OK if it database connexion works",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "healthz"
+                ],
+                "summary": "healthcheck",
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/roles": {
             "get": {
                 "description": "get all roles",
@@ -431,6 +460,17 @@ var doc = `{
                     "roles"
                 ],
                 "summary": "Create a role",
+                "parameters": [
+                    {
+                        "description": "dto",
+                        "name": "role",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RoleDTO"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "dto",
@@ -497,6 +537,15 @@ var doc = `{
                 ],
                 "summary": "Modify a role details",
                 "parameters": [
+                    {
+                        "description": "dto",
+                        "name": "role",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RoleDTO"
+                        }
+                    },
                     {
                         "type": "string",
                         "description": "role name",

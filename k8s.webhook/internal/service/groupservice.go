@@ -40,8 +40,8 @@ func (u *GroupService)FindAll(w http.ResponseWriter, r *http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		listDTO := []dto.GroupDTO{}
 		for _,group:=range groupList{
@@ -75,8 +75,8 @@ func (u *GroupService)FindByName(w http.ResponseWriter, r *http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		groupDTO := dto.GroupDTO{}
 		groupDTO.Convert(groupRepo)
@@ -114,8 +114,8 @@ func (u *GroupService)Save(w http.ResponseWriter, r * http.Request){
 		result:=groupRepo.Save(pg.Database)
 		if result.Error != nil{
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else{
 			groupDTO.Convert(groupRepo)
 			json.NewEncoder(w).Encode(groupDTO)
@@ -138,18 +138,15 @@ func (u *GroupService)Modify(w http.ResponseWriter, r *http.Request){
 	pg := repository.Postgres{}
 	pg.Initialization()
 	groupDTO := dto.GroupDTO{}
-	
 	_=json.NewDecoder(r.Body).Decode(&groupDTO)
-
 	vars := mux.Vars(r)
 	group := vars["group"]
 	var e format.Error
 	w.Header().Set("Content-Type", "application/json")
 	if group != groupDTO.Group{
-		
 		e.FormatError("input Error - ","mismatch between group name in path ("+group+") and body ("+groupDTO.Group+")",r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}
 	message,details,_ :=e.Unmarshal(&groupDTO)
     if message != "" {
@@ -162,13 +159,13 @@ func (u *GroupService)Modify(w http.ResponseWriter, r *http.Request){
 		if result.Error != nil{
 			var e format.Error
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(e)
 		}else {
 			if result.RowsAffected == 0{
 				e.FormatError("Input Error - ","Non editable field are modified!",r.RequestURI)
-				json.NewEncoder(w).Encode(e)
 				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(e)
 			}else{
 				groupDTO.Convert(groupRepo)
 				json.NewEncoder(w).Encode(groupDTO)
@@ -198,8 +195,8 @@ func (u *GroupService)Delete(w http.ResponseWriter, r *http.Request){
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
-		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(e)
 	}else{
 		groupDTO := dto.GroupDTO{}
 		groupDTO.Convert(groupRepo)

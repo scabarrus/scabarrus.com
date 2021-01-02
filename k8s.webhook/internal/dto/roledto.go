@@ -5,7 +5,7 @@ import (
 )
 
 type RoleDTO struct{
-	Role string `json:"role"`
+	Role string `json:"role" mandatory:"true"`
 	Namespace string `json:"namespace"`
 	Verb string `json:"verb"`
 	Group string `json:"group"`
