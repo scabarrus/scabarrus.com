@@ -1,7 +1,7 @@
 # scabarrus.com/k8s.webhook
 This repository contains some projects that help to understand webhook plugin that cant be embeded in a K8S cluster to manage:
 
-![alt text](https://github.com/scabarrus/scabarrus.com/blob/master/k8s_webhook.PNG)
+![Project link](https://github.com/scabarrus/scabarrus.com/blob/master/k8s_webhook.PNG)
 
 4 Webhooks will be developed to provide understanding of how your K8S cluster can be customized:
 * Authn webhook for user authentication
@@ -11,7 +11,7 @@ This repository contains some projects that help to understand webhook plugin th
 
 An additional microservice called user-management provide Endpoint to register in postgres user, groups and roles.
 
-![Deployment instruction](https://github.com/scabarrus/scabarrus.com/blob/master/user-management.PNG)
+
 
 ## Lab environment
 My lab environment is a minimal K8S cluster with one Master and one Worker (poor cluster :-)).
