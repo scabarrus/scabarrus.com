@@ -10,10 +10,11 @@ WORKDIR /go/src
 # Copy the source from the current directory to the Working Directory inside the container
 COPY ./scabarrus.com ./scabarrus.com
 
-RUN cd scabarrus.com/k8s.webhook ; go mod init; go mod vendor
+RUN cd scabarrus.com/k8s.webhook ; go mod init; go mod vendor;go get -u github.com/swaggo/swag/cmd/swag
 
 #Download swag command and generate swagger with dependencies
-RUN go get -u github.com/swaggo/swag/cmd/swag;cd scabarrus.com/k8s.webhook/cmd/user-management;swag init --parseDependency -g main.go 
+RUN swag init --parseDependency -g scabarrus.com/k8s.webhook/cmd/user-management/main.go 
+
 # Build the Go app
 RUN go build -o main  scabarrus.com/k8s.webhook/cmd/user-management
 
