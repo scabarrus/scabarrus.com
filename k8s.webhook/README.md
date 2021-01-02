@@ -38,7 +38,7 @@ This microservice should be used only as example, because:
 * It will be better to use oidc capabilities to manage authentication (perhaps in another repo)
 
 For deployment instruction go to :
-![alt text](https://github.com/scabarrus/scabarrus.com/blob/master/k8s.webhook/deployment/user-mgt/user-management.md)
+![Deployment instruction](https://github.com/scabarrus/scabarrus.com/blob/master/k8s.webhook/deployment/user-mgt/user-management.md)
 
 ## Authn webhook
 This webhook just query user-management microservice with bearer token sent when a user wants to interact with api-server.
