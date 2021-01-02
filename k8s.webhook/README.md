@@ -25,6 +25,44 @@ This module contains three 4 main project:
 - validate webhook (not yet)
 - mutating webhook (not yet)
 
+
+## Project layout
+
+```
+# tree -d
+.
+└── k8s.webhook
+    ├── cmd
+    │   ├── admission
+    │   ├── authn
+    │   ├── authz
+    │   └── user-management
+    │       └── docs
+    ├── configs
+    ├── deployment
+    │   ├── authn
+    │   └── user-mgt
+    ├── docs
+    ├── internal
+    │   ├── domain
+    │   ├── dto
+    │   ├── error
+    │   ├── repository
+    │   ├── service
+    │   └── utils
+    └── middleware
+```
+
+First layout level description
+| Folder        | Description                                               |
+| ------------- | ----------------------------------------------------------|
+| cmd           | contain folder of each main application                   |
+| configs       | contain all global config on K8S                          |
+| deployment    | contain all yaml files required to deploy the application |
+| internal      | contain all internal package that no need to be exported outside of the project|
+| middleware    | contain middleware that act as decorator method for each http request (example: logging)|
+
+
 ## User-management
 This microservices provides endpoint to manage users and groups.
 There is for now no authentication required because it's just as an example.
