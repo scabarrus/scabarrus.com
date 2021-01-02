@@ -26,4 +26,15 @@ spec:
                   key: POSTGRES_CON
           ports:
             - containerPort: 9443
-                   
+          livenessProbe:
+            httpGet:
+              path: /api/v1/healthz
+              port: 9443
+            failureThreshold: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/v1/healthz
+              port: 9443
+            failureThreshold: 1
+            periodSeconds: 10
