@@ -37,32 +37,8 @@ This microservice should be used only as example, because:
 * It was written for example and not for production
 * It will be better to use oidc capabilities to manage authentication (perhaps in another repo)
 
-### Docker image 
-To build the image from docker command:
-```
-# docker build -t user-management:1.0 -f scabarrus.com/k8s.webhook/deployment/Dockerfile . 
-```
-
-If you are on remote VM you can save this image with following command:
-```
-docker save -o user-management.tar user-management:1.0
-```
-
-If you want to load the image proviously on the worker (no registry for the moment):<br>
-```
-# docker load -i /tmp/user-management
-352733f0fa4c: Loading layer [==================================================>] 2.293 MB/2.293 MB
-a725aa4d4c34: Loading layer [==================================================>] 61.37 MB/61.37 MB
-64bee900ead7: Loading layer [==================================================>] 34.24 MB/34.24 MB
-Loaded image: user-management:1.0
-```
-
-### Deploy application
-```
-# kubectl apply -f scabarrus.com/k8s.webhook/deployment/usr-mgt/configmap.yaml
-# kubectl apply -f scabarrus.com/k8s.webhook/deployment/usr-mgt/deployment.yaml
-# kubectl expose deploy user-management-deploy --name user-management-svc  --type=NodePort
-```
+For deployment instruction go to :
+![alt text](https://github.com/scabarrus/scabarrus.com/blob/master/k8s.webhook/deployment/user-mgt/user-management.md)
 
 ## Authn webhook
 This webhook just query user-management microservice with bearer token sent when a user wants to interact with api-server.
