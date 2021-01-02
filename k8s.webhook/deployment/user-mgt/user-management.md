@@ -30,7 +30,9 @@ You can access to the swagger by following url:
 http://{worker ip address}:{node port}/swagger/index.html
 
 ```
-# kubectl logs -f user-management-deploy-585f9846f6-28c2z
+
+You can check log of the pod and see that at least each request are trace.
+# kubectl logs -f user-management-deploy-{pod indentifier}
 2021/01/02 00:28:03 GET   192.168.169.129:31958   /swagger/index.html   192.168.169.129:38063
 2021/01/02 00:28:03 GET   192.168.169.129:31958   /swagger/swagger-ui.css   192.168.169.129:38063
 2021/01/02 00:28:03 GET   192.168.169.129:31958   /swagger/swagger-ui-bundle.js   192.168.169.129:60197
