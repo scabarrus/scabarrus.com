@@ -26,3 +26,12 @@ spec:
               value: "/go/src/scabarrus.com/k8s.webhook/configs/"
           ports:
             - containerPort: 9443
+          volumeMounts:
+            - name: certificate-vol
+              mountPath: "/go/src/scabarrus.com/k8s.webhook/configs/"
+      volumes:
+        - name: certificate-vol
+          configMap:
+            name: authn-confmap
+            
+     
