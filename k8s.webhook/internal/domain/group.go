@@ -28,10 +28,13 @@ func (g *Group)  AssociationDelete(db *gorm.DB,u User)(error){
 }
 
 
-func (g *Group) AssociationFindByName(db *gorm.DB)(* gorm.DB){
-	return db.Session(&gorm.Session{FullSaveAssociations: true}).Find(&g)
+func (g *Group) AssociationFindByName(db *gorm.DB,u *User)(error){
+	return db.Model(&g).Debug().Where("group_group=?",g.Group).Association("Users").Find(&u)
 }
-
+func (g *Group) FindAllMember(db *gorm.DB,u *[]User)(error){
+	//groupList := []Group{}
+	return db.Model(&g).Debug().Where("group_group=?",g.Group).Association("Users").Find(&u)
+}
 //Save is method to save new Group
 func (g *Group) Save(db *gorm.DB) *gorm.DB {
 	return db.Create(&g)

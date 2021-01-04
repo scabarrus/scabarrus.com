@@ -50,6 +50,8 @@ func (u *User) FindAll(db *gorm.DB)(* gorm.DB,[]User){
 //FindByName is method to retrieve an User by his name
 func (u *User) FindByName(db *gorm.DB)(* gorm.DB){
 	return db.Debug().Preload("Groups").Where("\"user\"=?",u.User).First(&u)
+	//return db.Model(&u).Debug().Where("user=?",u.User).Association("Groups").Find(&g)
+
 }
 
 //Modify is method to update an User

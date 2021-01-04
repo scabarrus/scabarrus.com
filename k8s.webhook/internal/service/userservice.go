@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -33,21 +34,28 @@ type UserService struct {
 // @Success 200 {object} dto.UserDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /users [get]
+// FindAll retrieve all user in DB
+// It return a json payload with a slice of user or an error message
 func (u *UserService)FindAll(w http.ResponseWriter, r *http.Request){
+	//Instanciate pg repository
 	pg := repository.Postgres{}
+	//Initialize the postgres repository
 	pg.Initialization()
 	
 	usersRepo :=domain.User{}
 	w.Header().Set("Content-Type", "application/json")
+	//Use FindAll user repository method
 	result,userList:=usersRepo.FindAll(pg.Database)
+	//if an error appears
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(e)
 		
-	}else{
+	}else{ 
 		listDTO := []dto.UserDTO{}
+		//Parse user list to convert in slice 
 		for _,user := range userList{
 			userDTO := dto.UserDTO{}
 			userDTO.Convert(user)
@@ -68,21 +76,28 @@ func (u *UserService)FindAll(w http.ResponseWriter, r *http.Request){
 // @Success 200 {object} dto.UserDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /users/{user} [get]
-func (u *UserService)FindByName(w http.ResponseWriter, r *http.Request){
+// FindAll retrieve a user by it's name
+// User name is in URI
+// It return a json payload with user details or an error message
+func (u UserService)FindByName(w http.ResponseWriter, r *http.Request){
+	//Instanciate pg repository
 	pg := repository.Postgres{}
+	//Initialize the postgres repository
 	pg.Initialization()
 	vars := mux.Vars(r)
 	user := vars["user"]
 	userRepo :=domain.User{User:user}
+	fmt.Println("user repo ",userRepo)
 	w.Header().Set("Content-Type", "application/json")
 	result:=userRepo.FindByName(pg.Database)
+	//if an error appears when DB is queried
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(e)
 		
-	}else{
+	}else{ //Convert user information in DTO defined
 		userDTO := dto.UserDTO{}
 		userDTO.Convert(userRepo)
 		json.NewEncoder(w).Encode(userDTO)
@@ -99,26 +114,33 @@ func (u *UserService)FindByName(w http.ResponseWriter, r *http.Request){
 // @Success 200 {object} dto.UserDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /users [post]
+// Save register a user 
+// It return a json payload with user details or an error message
 func (u *UserService)Save(w http.ResponseWriter, r * http.Request){
+	//Instanciate pg repository
 	pg := repository.Postgres{}
-	userDTO := dto.UserDTO{}
+	//Initialize the postgres repository
 	pg.Initialization()
+	userDTO := dto.UserDTO{}
 	_=json.NewDecoder(r.Body).Decode(&userDTO)
 
 	var e format.Error
+	//validate payload format
 	message,details,_ :=e.Unmarshal(&userDTO)
+	//in case of missing mandatory parameter
     if message != "" {
 		e.FormatError(message,details,r.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(e)
-	}else{
+	}else{ //Register user
 		userRepo := domain.User{}.DTO(userDTO.UID,userDTO.User,userDTO.Password)
 		w.Header().Set("Content-Type", "application/json")
 		result:=userRepo.Save(pg.Database)
+		//if an error appears when insert db is performed
 		if result.Error != nil{
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
 			json.NewEncoder(w).Encode(e)
-		}else{
+		}else{ //Display in ouput user details
 			userDTO.Convert(userRepo)
 			json.NewEncoder(w).Encode(userDTO)
 		}
@@ -137,8 +159,13 @@ func (u *UserService)Save(w http.ResponseWriter, r * http.Request){
 // @Success 200 {object} dto.UserDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /users/{user} [put]
+// Modify update a user 
+// User name is in URI but also in payload
+// It return a json payload with user details or an error message
 func (u *UserService)Modify(w http.ResponseWriter, r *http.Request){
+	//Instanciate pg repository
 	pg := repository.Postgres{}
+	//Initialize the postgres repository
 	pg.Initialization()
 	userDTO := dto.UserDTO{}
 	
@@ -148,28 +175,32 @@ func (u *UserService)Modify(w http.ResponseWriter, r *http.Request){
 	userRepo := domain.User{}.DTO(userDTO.UID,userDTO.User,userDTO.Password)
 	w.Header().Set("Content-Type", "application/json")
 	user := vars["user"]
+	//control user in URI match with user in payload
 	if user != userDTO.User{
 			e.FormatError("input Error - ","mismatch between user name in path ("+user+") and body ("+userDTO.User+")",r.RequestURI)
 			json.NewEncoder(w).Encode(e)
 			w.WriteHeader(http.StatusBadRequest)
 	}
+	// validate no mandatory attribute are missing
 	message,details,_ :=e.Unmarshal(&userDTO)
     if message != "" {
 		e.FormatError(message,details,r.RequestURI)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(e)
-	}else{
+	}else{ //Modify user details
 		result:=userRepo.Modify(pg.Database)
+		//if an error appears during DB update
 		if result.Error != nil{
 			e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(e)
 		}else{
+			//if non editable field are modified, the update won't change any user
 			if result.RowsAffected == 0{
 				e.FormatError("Input Error - ","Non editable field are modified!",r.RequestURI)
 				w.WriteHeader(http.StatusBadRequest)
 				json.NewEncoder(w).Encode(e)	
-			}else{
+			}else{ // Return user information
 				userDTO.Convert(userRepo)
 				json.NewEncoder(w).Encode(userDTO)
 			}
@@ -188,20 +219,26 @@ func (u *UserService)Modify(w http.ResponseWriter, r *http.Request){
 // @Success 200 {object} dto.UserDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /users/{user} [delete]
+// Delete remove a user
+// User name is in URI and there is no payload
+// It return a json payload with user details or an error message
 func (u *UserService)Delete(w http.ResponseWriter, r *http.Request){
+	//Instanciate pg repository
 	pg := repository.Postgres{}
+	//Initialize the postgres repository
 	pg.Initialization()
 	vars := mux.Vars(r)
 	user := vars["user"]
 	userRepo :=domain.User{User:user}
 	w.Header().Set("Content-Type", "application/json")
 	result:=userRepo.Delete(pg.Database)
+	//if an error appear during DB delete
 	if result.Error != nil{
 		var e format.Error
 		e.FormatError("SQL Error - ",result.Error.Error(),r.RequestURI)
 		json.NewEncoder(w).Encode(e)
 		w.WriteHeader(http.StatusBadRequest)
-	}else{
+	}else{ //Return user details
 		userDTO := dto.UserDTO{}
 		userDTO.Convert(userRepo)
 		json.NewEncoder(w).Encode(userDTO)
