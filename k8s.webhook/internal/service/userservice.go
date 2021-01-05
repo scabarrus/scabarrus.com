@@ -156,6 +156,7 @@ func (u *UserService)Save(w http.ResponseWriter, r * http.Request){
 // @Accept  json
 // @Produce  json
 // @Param user path string true "user name"
+// @Param userDTO body dto.UserDTO true "dto"
 // @Success 200 {object} dto.UserDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /users/{user} [put]

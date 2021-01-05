@@ -25,7 +25,7 @@ type RoleMemberService struct {
 // @Accept  json
 // @Produce  json
 // @Param role path string true "role name"
-// @Param role body RoleMemberService true "dto"
+// @Param member body RoleMemberService true "payload"
 // @Success 200 {object} dto.RoleDTO true "dto"
 // @Success 400 {object} format.Error
 // @Router /roles/{role}/members [post]
@@ -87,7 +87,7 @@ func (m *RoleMemberService)Save(w http.ResponseWriter, r * http.Request){
 // @Param role path string true "role name"
 // @Success 200 {object} dto.RoleDTO true "dto"
 // @Success 400 {object} format.Error
-// @Router /roles/{role}/members [post]
+// @Router /roles/{role}/members [delete]
 func (m *RoleMemberService)Delete(w http.ResponseWriter, r * http.Request){
 	pg := repository.Postgres{}
 	pg.Initialization()

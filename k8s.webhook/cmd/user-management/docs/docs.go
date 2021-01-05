@@ -665,6 +665,51 @@ var doc = `{
                         "name": "role",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "payload",
+                        "name": "member",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.RoleMemberService"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "dto",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RoleDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "create a member's group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "roles"
+                ],
+                "summary": "Create a member's group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "role name",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -851,6 +896,15 @@ var doc = `{
                         "name": "user",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "dto",
+                        "name": "userDTO",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserDTO"
+                        }
                     }
                 ],
                 "responses": {
@@ -921,6 +975,12 @@ var doc = `{
                 "group": {
                     "type": "string",
                     "example": "operator"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UserDTO"
+                    }
                 }
             }
         },

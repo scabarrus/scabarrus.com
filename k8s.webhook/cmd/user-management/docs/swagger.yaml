@@ -11,6 +11,10 @@ definitions:
       group:
         example: operator
         type: string
+      users:
+        items:
+          $ref: '#/definitions/dto.UserDTO'
+        type: array
     type: object
   dto.RoleDTO:
     properties:
@@ -467,6 +471,30 @@ paths:
       tags:
       - roles
   /roles/{role}/members:
+    delete:
+      consumes:
+      - application/json
+      description: create a member's group
+      parameters:
+      - description: role name
+        in: path
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.RoleDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Create a member's group
+      tags:
+      - roles
     get:
       consumes:
       - application/json
@@ -503,6 +531,12 @@ paths:
         name: role
         required: true
         type: string
+      - description: payload
+        in: body
+        name: member
+        required: true
+        schema:
+          $ref: '#/definitions/service.RoleMemberService'
       produces:
       - application/json
       responses:
@@ -650,6 +684,12 @@ paths:
         name: user
         required: true
         type: string
+      - description: dto
+        in: body
+        name: userDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserDTO'
       produces:
       - application/json
       responses:
