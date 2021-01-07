@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: user-management
-          image: user-management:1.0
+          image: user-management:1.1
           env:
             - name: POSTGRES_CON
               valueFrom:

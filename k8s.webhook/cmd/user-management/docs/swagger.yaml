@@ -11,6 +11,10 @@ definitions:
       group:
         example: operator
         type: string
+      roles:
+        items:
+          $ref: '#/definitions/dto.RoleDTO'
+        type: array
       users:
         items:
           $ref: '#/definitions/dto.UserDTO'
@@ -326,6 +330,31 @@ paths:
           schema:
             $ref: '#/definitions/error.Error'
       summary: Find a member's group by it's name
+      tags:
+      - groups
+  /groups/{group}/roles:
+    get:
+      consumes:
+      - application/json
+      description: find a role's group by it's name
+      parameters:
+      - description: group name
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: dto
+          schema:
+            $ref: '#/definitions/dto.GroupDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: Find a role's group by it's name
       tags:
       - groups
   /healthz:

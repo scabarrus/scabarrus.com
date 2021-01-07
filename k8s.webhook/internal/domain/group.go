@@ -10,6 +10,7 @@ type Group struct {
 	Description string
 	ID uint
 	Users   []User `gorm:"many2many:user_group;"`
+	Roles   []Role `gorm:"many2many:role_group;"`
 }
 
 func (g Group) DTO(gid int, group string, description string) Group{
@@ -41,6 +42,12 @@ func (g *Group) Save(db *gorm.DB) *gorm.DB {
 
 }
 
+func (g *Group) AssociationRoleGroupByName(db *gorm.DB)(*gorm.DB){
+	return db.Debug().Preload("Roles").Where("\"group\"=?",g.Group).Find(&g)
+}
+func (g *Group) AssociationRoleFindByName(db *gorm.DB,u *User)(error){
+	return db.Model(&g).Debug().Where("group_group=?",g.Group).Association("Users").Find(&u)
+}
 //FindAll is method to find all groups
 func (g *Group) FindAll(db *gorm.DB) (*gorm.DB, []Group) {
 	groupList := []Group{}
@@ -50,7 +57,7 @@ func (g *Group) FindAll(db *gorm.DB) (*gorm.DB, []Group) {
 
 //FindByName is method to retrieve an Group by his name
 func (g *Group) FindByName(db *gorm.DB) *gorm.DB {
-	return db.Debug().Where("\"group\"=?", g.Group).First(&g)
+	return db.Debug().Preload("Users").Where("\"group\"=?",g.Group).Find(&g)
 }
 
 //Modify is method to update an Group

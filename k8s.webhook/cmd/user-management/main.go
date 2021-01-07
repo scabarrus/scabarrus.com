@@ -54,6 +54,10 @@ func main (){
 	r.HandleFunc("/api/v1/groups/{group}/members/{member}", groupMemberService.FindByName).Methods("GET")
 	r.HandleFunc("/api/v1/groups/{group}/members/{member}", groupMemberService.Delete).Methods("DELETE")
 
+	//Manager role's group
+	groupRoleService:=service.GroupRoleService{}
+	r.HandleFunc("/api/v1/groups/{group}/roles", groupRoleService.FindByName).Methods("GET")
+	
 	
 	// Manage Roles
 	roleService:=service.RoleService{}
@@ -62,6 +66,7 @@ func main (){
 	r.HandleFunc("/api/v1/roles/{role}", roleService.FindByName).Methods("GET")
 	r.HandleFunc("/api/v1/roles/{role}", roleService.Modify).Methods("PUT")
 	r.HandleFunc("/api/v1/roles/{role}", roleService.Delete).Methods("DELETE")
+	
 
 	roleMemberService:=service.RoleMemberService{}
 	r.HandleFunc("/api/v1/roles/{role}/members", roleMemberService.FindAll).Methods("GET")
@@ -69,6 +74,7 @@ func main (){
 	r.HandleFunc("/api/v1/roles/{role}/members/{member}", roleMemberService.FindByName).Methods("GET")
 	r.HandleFunc("/api/v1/roles/{role}/members/{member}", roleMemberService.Delete).Methods("DELETE")
 	
+
 	r.HandleFunc("/api/v1/healthz",liveness.Healthz).Methods("GET")
 	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 

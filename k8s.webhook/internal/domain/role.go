@@ -42,6 +42,10 @@ func (r *Role) AssociationDelete(db *gorm.DB,g Group)(error){
 func (r *Role) AssociationFindByName(db *gorm.DB)(* gorm.DB){
 	return db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&r).Find(&r)
 }
+
+func (r *Role) AssociationFindByGroupName(db *gorm.DB,group string)(* gorm.DB){
+	return db.Debug().Preload("Groups").Where("\"group\"=?",group).Find(&r)
+}
 //FindAll is method to find all users
 func (r *Role) FindAll(db *gorm.DB)(* gorm.DB,[]Role){
 	roleList:=[]Role{}

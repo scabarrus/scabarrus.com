@@ -391,6 +391,44 @@ var doc = `{
                 }
             }
         },
+        "/groups/{group}/roles": {
+            "get": {
+                "description": "find a role's group by it's name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Find a role's group by it's name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group name",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "dto",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GroupDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/healthz": {
             "get": {
                 "description": "send OK if it database connexion works",
@@ -975,6 +1013,12 @@ var doc = `{
                 "group": {
                     "type": "string",
                     "example": "operator"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.RoleDTO"
+                    }
                 },
                 "users": {
                     "type": "array",

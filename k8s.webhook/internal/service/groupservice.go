@@ -36,7 +36,7 @@ func (u *GroupService)FindAll(w http.ResponseWriter, r *http.Request){
 	//Instanciate pg repository
 	pg := repository.Postgres{}
 	//Initialize the postgres repository
-	
+	pg.Initialization()
 	groupRepo :=domain.Group{}
 	w.Header().Set("Content-Type", "application/json")
 	result,groupList:=groupRepo.FindAll(pg.Database)
@@ -76,6 +76,7 @@ func (u *GroupService)FindByName(w http.ResponseWriter, r *http.Request){
 	//Instanciate pg repository
 	pg := repository.Postgres{}
 	//Initialize the postgres repository
+	pg.Initialization()
 	vars := mux.Vars(r)
 	group := vars["group"]
 	groupRepo :=domain.Group{Group:group}
@@ -110,6 +111,7 @@ func (u *GroupService)Save(w http.ResponseWriter, r * http.Request){
 	//Instanciate pg repository
 	pg := repository.Postgres{}
 	//Initialize the postgres repository
+	pg.Initialization()
 	groupDTO := dto.GroupDTO{}
 	initDB:= domain.Group{}
 	initDB.DBMigrate(pg.Database)
@@ -159,6 +161,7 @@ func (u *GroupService)Modify(w http.ResponseWriter, r *http.Request){
 	//Instanciate pg repository
 	pg := repository.Postgres{}
 	//Initialize the postgres repository
+	pg.Initialization()
 	groupDTO := dto.GroupDTO{}
 	_=json.NewDecoder(r.Body).Decode(&groupDTO)
 	vars := mux.Vars(r)
@@ -219,6 +222,7 @@ func (u *GroupService)Delete(w http.ResponseWriter, r *http.Request){
 	//Instanciate pg repository
 	pg := repository.Postgres{}
 	//Initialize the postgres repository
+	pg.Initialization()
 	vars := mux.Vars(r)
 	group := vars["group"]
 	groupRepo :=domain.Group{Group:group}

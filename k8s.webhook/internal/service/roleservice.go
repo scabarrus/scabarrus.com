@@ -167,7 +167,7 @@ func (r *RoleService)Modify(w http.ResponseWriter, req *http.Request){
 	role := vars["role"]
 	var e format.Error
 	// if role in URI not match with URI in body
-	if r.Role != roleDTO.Role{
+	if role != roleDTO.Role{
 			e.FormatError("input Error - ","mismatch between role name in path ("+role+") and body ("+roleDTO.Role+")",req.RequestURI)
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(e)
